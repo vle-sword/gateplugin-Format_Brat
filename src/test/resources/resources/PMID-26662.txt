@@ -1,0 +1,4 @@
+Regulation of initial rate of induction of nicotinamide adenine dinucleotide phosphate-specific glutamate dehydrogenase during the cell cycle of synchronous Chlorella.
+When synchronous cells of the eucaryotic microorganism Chlorella sorokiniana growing in nitrate medium were challenged to synthesize an ammonium-inducible nicotinamide adenine dinucleotide phosphate-specific glutamate dehydrogenase (NADP-GDH) at frequent intervals during the cell cycle the initial rate of induction (i.e., enzyme potential) of this enzyme increased in an approximately linear manner until the period of DNA replication (i.e., S phase).
+During the S phase, NADP-GDH potential exhibited a positive rate change proportional to the step increase in DNA level.
+The approximately linear increase in NADP-GDH potential and also of total cellular protein observed before and after the S phase is proposed to be a result of the increasing photosynthetic capacity of the cell during the cell cycle.

@@ -1,0 +1,47 @@
+T1	GGP 96 119	glutamate dehydrogenase
+N2	Reference T1 homologene:55885	GDH
+N3	Reference T1 entrezgene:2746	GDH
+N5	Reference T1 ncbitax:9606	Homo sapiens
+T2	GGP 376 399	glutamate dehydrogenase
+N7	Reference T2 homologene:55885	GDH
+N8	Reference T2 entrezgene:2746	GDH
+N10	Reference T2 ncbitax:9606	Homo sapiens
+T3	GGP 401 409	NADP-GDH
+N12	Reference T3 homologene:56339	GDH1
+N14	Reference T3 ncbitax:9606	Homo sapiens
+T4	GGP 642 646	NADP
+N16	Reference T4 ncbitax:9606	Homo sapiens
+T5	GGP 647 650	GDH
+N18	Reference T5 homologene:55885	GDH
+N19	Reference T5 entrezgene:2746	GDH
+N21	Reference T5 ncbitax:9606	Homo sapiens
+T6	GGP 779 783	NADP
+N23	Reference T6 ncbitax:9606	Homo sapiens
+T7	GGP 784 787	GDH
+N25	Reference T7 homologene:55885	GDH
+N26	Reference T7 entrezgene:2746	GDH
+N28	Reference T7 ncbitax:9606	Homo sapiens
+T8	Positive_regulation 30 39	induction
+T9	Regulation 0 10	Regulation
+T10	Gene_expression 290 300	synthesize
+E1	Regulation:T9 Theme:E2
+A1	Confidence E1 medium
+#1	Confidence E1	2.9006
+E2	Positive_regulation:T8 Theme:T1
+A2	Confidence E2 medium
+#2	Confidence E2	2.9464
+E3	Gene_expression:T10 Theme:T2
+A3	Confidence E3 medium
+#3	Confidence E3	2.1766
+E4	Gene_expression:T10 Theme:T3
+A4	Confidence E4 medium
+#4	Confidence E4	2.1766
+#5	AnnotatorNotes T1	this annotation is suspect
+A5	Negation E4
+N1	Reference T1 Wikipedia:534366	Barack Obama
+R1	Test Arg1:T1 Arg2:T2
+*	Equiv T3 T4
+A6	Negation T1
+A7	Confidence T1 3.142
+A8	Confidence T2 12345
+#6	AnnotatorNotes E1	this is a note on an event
