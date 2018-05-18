@@ -1,5 +1,13 @@
 package gate.creole.brat;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import gate.Annotation;
 import gate.AnnotationSet;
 import gate.Resource;
@@ -9,16 +17,6 @@ import gate.creole.ResourceInstantiationException;
 import gate.creole.metadata.CreoleParameter;
 import gate.creole.metadata.CreoleResource;
 import gate.creole.metadata.RunTime;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @CreoleResource(name = "brat Normalizer")
 public class BratNormalizer extends AbstractLanguageAnalyser {
@@ -70,9 +68,8 @@ public class BratNormalizer extends AbstractLanguageAnalyser {
   @Override
   public Resource init() throws ResourceInstantiationException {
 
-    try {
-      BufferedReader in =
-        new BufferedReader(new InputStreamReader(toolsConf.openStream()));
+    try (BufferedReader in =
+        new BufferedReader(new InputStreamReader(toolsConf.openStream()))) {
 
       String line;
       while((line = in.readLine()) != null) {
@@ -111,18 +108,18 @@ public class BratNormalizer extends AbstractLanguageAnalyser {
         Map<String,String> originals = (Map<String,String>)obj;
         Map<String,String> normalized = new HashMap<String,String>();
         
-        for (String original : originals.keySet()) {
+        for (Map.Entry<String,String> original : originals.entrySet()) {
           if (type.equals(Type.EXPAND)) {
-            String[] data = original.split(":",2);
+            String[] data = original.getKey().split(":",2);
             Normalization normalizer = expansions.get(data[0]);
             if (normalizer == null) continue;
-            normalized.put(normalizer.expand(data[1]), originals.get(original));
+            normalized.put(normalizer.expand(data[1]), original.getValue());
           }
           else {
             for (Normalization normalizer : expansions.values()) {
-              String collapsed = normalizer.collapse(original);
+              String collapsed = normalizer.collapse(original.getKey());
               if (collapsed != null) {
-                normalized.put(collapsed, originals.get(original));
+                normalized.put(collapsed, original.getValue());
                 break;
               }
             }

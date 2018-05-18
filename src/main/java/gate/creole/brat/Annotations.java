@@ -27,26 +27,27 @@ public class Annotations implements Iterable<BratAnnotation> {
 
   // we use a LinkedHashMap so that the annotations are returned in order
   private Map<String, BratAnnotation> indexById =
-    new LinkedHashMap<String, BratAnnotation>();
+      new LinkedHashMap<String, BratAnnotation>();
 
   private Map<Class<? extends BratAnnotation>, Set<String>> indexByType =
-    new HashMap<Class<? extends BratAnnotation>, Set<String>>();
+      new HashMap<Class<? extends BratAnnotation>, Set<String>>();
 
   private Map<String, Set<String>> indexByTarget =
-    new HashMap<String, Set<String>>();
+      new HashMap<String, Set<String>>();
 
   private Map<Class<? extends BratAnnotation>, Integer> typeOffsets =
-    new HashMap<Class<? extends BratAnnotation>, Integer>();
+      new HashMap<Class<? extends BratAnnotation>, Integer>();
 
   public Annotations(URL url) throws IOException {
-    BufferedReader in =
-      new BufferedReader(new InputStreamReader(url.openStream()));
-    String line;
-    while((line = in.readLine()) != null) {
-      line = line.trim();
-      if(line.isEmpty()) continue;
+    try (BufferedReader in =
+        new BufferedReader(new InputStreamReader(url.openStream()))) {
+      String line;
+      while((line = in.readLine()) != null) {
+        line = line.trim();
+        if(line.isEmpty()) continue;
 
-      add(BratAnnotation.parse(line));
+        add(BratAnnotation.parse(line));
+      }
     }
   }
 
@@ -95,12 +96,11 @@ public class Annotations implements Iterable<BratAnnotation> {
 
     if(!typeOffsets.containsKey(annotation.getClass())) {
       typeOffsets.put(annotation.getClass(),
-        Integer.parseInt(annotation.getID().substring(1)));
+          Integer.parseInt(annotation.getID().substring(1)));
     } else {
-      typeOffsets.put(
-        annotation.getClass(),
-        Math.max(typeOffsets.get(annotation.getClass()),
-          Integer.parseInt(annotation.getID().substring(1))));
+      typeOffsets.put(annotation.getClass(),
+          Math.max(typeOffsets.get(annotation.getClass()),
+              Integer.parseInt(annotation.getID().substring(1))));
     }
   }
 
@@ -140,7 +140,8 @@ public class Annotations implements Iterable<BratAnnotation> {
   }
 
   @SuppressWarnings("unchecked")
-  public <T extends BratAnnotation> Set<T> getDependent(String id, Class<T> type) {
+  public <T extends BratAnnotation> Set<T> getDependent(String id,
+      Class<T> type) {
     Set<T> dependent = new HashSet<T>();
 
     if(!indexByTarget.containsKey(id)) return dependent;
@@ -172,7 +173,7 @@ public class Annotations implements Iterable<BratAnnotation> {
   public Set<TextBound> getEventTriggers() {
     // TODO make this an index so it is easy to get out
     Set<TextBound> triggers = new HashSet<TextBound>();
-System.out.println(indexByType.get(Event.class));
+    System.out.println(indexByType.get(Event.class));
     for(String id : indexByType.get(Event.class)) {
       Event event = (Event)indexById.get(id);
       triggers.add((TextBound)indexById.get(event.getTarget()));
@@ -218,7 +219,7 @@ System.out.println(indexByType.get(Event.class));
 
   @SuppressWarnings("unchecked")
   public static Annotations getBratAnnotations(AnnotationSet annots,
-                                               AnnotationConfig config) {
+      AnnotationConfig config) {
     Annotations annotations = new Annotations();
 
     StringBuilder builder = new StringBuilder();
@@ -258,8 +259,7 @@ System.out.println(indexByType.get(Event.class));
       annotations.add(BratAnnotation.parse(builder.toString()));
       gate2brat.put(entity.getId(), bratID);
 
-      a =
-        addAttributes(bratID, a, config.attributes, entity.getFeatures(),
+      a = addAttributes(bratID, a, config.attributes, entity.getFeatures(),
           annotations);
       n = addNotes(bratID, n, entity.getFeatures(), annotations);
 
@@ -268,7 +268,7 @@ System.out.println(indexByType.get(Event.class));
         if(obj instanceof Map) {
 
           for(Map.Entry<String, String> entry : ((Map<String, String>)obj)
-            .entrySet()) {
+              .entrySet()) {
             builder.setLength(0);
             builder.append("N");
             builder.append(++l);
@@ -286,7 +286,7 @@ System.out.println(indexByType.get(Event.class));
     }
 
     List<gate.relations.Relation> relations =
-      new ArrayList<gate.relations.Relation>();
+        new ArrayList<gate.relations.Relation>();
     relations.addAll(annots.getRelations().getRelations(Brat.EQUIVALENCE));
     relations.addAll(annots.getRelations().getRelations(Brat.RELATION));
     relations.addAll(annots.getRelations().getRelations(Brat.EVENT));
@@ -322,7 +322,7 @@ System.out.println(indexByType.get(Event.class));
         } else if(relation.getType().equals(Brat.RELATION)) {
           String bratID = "R" + (++r);
           List<String> labels =
-            (List<String>)relation.getFeatures().get(Brat.ARGUMENT_LABELS);
+              (List<String>)relation.getFeatures().get(Brat.ARGUMENT_LABELS);
           builder.setLength(0);
           builder.append(bratID);
           builder.append("\t");
@@ -337,15 +337,14 @@ System.out.println(indexByType.get(Event.class));
           annotations.add(BratAnnotation.parse(builder.toString()));
           gate2brat.put(relation.getId(), bratID);
 
-          a =
-            addAttributes(bratID, a, config.attributes, relation.getFeatures(),
-              annotations);
+          a = addAttributes(bratID, a, config.attributes,
+              relation.getFeatures(), annotations);
           n = addNotes(bratID, n, relation.getFeatures(), annotations);
 
         } else if(relation.getType().equals(Brat.EVENT)) {
           String bratID = "E" + (++e);
           List<String> labels =
-            (List<String>)relation.getFeatures().get(Brat.ARGUMENT_LABELS);
+              (List<String>)relation.getFeatures().get(Brat.ARGUMENT_LABELS);
           builder.setLength(0);
           builder.append(bratID);
           builder.append("\t");
@@ -361,9 +360,8 @@ System.out.println(indexByType.get(Event.class));
           annotations.add(BratAnnotation.parse(builder.toString()));
           gate2brat.put(relation.getId(), bratID);
 
-          a =
-            addAttributes(bratID, a, config.attributes, relation.getFeatures(),
-              annotations);
+          a = addAttributes(bratID, a, config.attributes,
+              relation.getFeatures(), annotations);
           n = addNotes(bratID, n, relation.getFeatures(), annotations);
         }
 
@@ -372,16 +370,15 @@ System.out.println(indexByType.get(Event.class));
 
       // TODO pick a better exception type
       if(left == relations.size())
-        throw new IllegalArgumentException("invalid document relations: " +
-          relations);
+        throw new IllegalArgumentException(
+            "invalid document relations: " + relations);
     }
 
     return annotations;
   }
 
-  private static int addAttributes(String bratID, int a,
-                                   Set<String> attributes, FeatureMap features,
-                                   Annotations annotations) {
+  private static int addAttributes(String bratID, int a, Set<String> attributes,
+      FeatureMap features, Annotations annotations) {
     StringBuilder builder = new StringBuilder();
     for(String attribute : attributes) {
       if(features.containsKey(attribute)) {
@@ -404,7 +401,7 @@ System.out.println(indexByType.get(Event.class));
   }
 
   private static int addNotes(String bratID, int n, FeatureMap features,
-                              Annotations annotations) {
+      Annotations annotations) {
     StringBuilder builder = new StringBuilder();
     if(features.containsKey(Brat.NOTES)) {
       Object obj = features.get(Brat.NOTES);
@@ -431,7 +428,7 @@ System.out.println(indexByType.get(Event.class));
     Annotations annots = new Annotations();
     annots.add(BratAnnotation.parse("T1\tPerson 0 10\tHello World"));
     annots
-      .add(BratAnnotation.parse("#1\tNotes T1\tThe notes we want to store"));
+        .add(BratAnnotation.parse("#1\tNotes T1\tThe notes we want to store"));
     System.out.println(annots.toString());
     annots.remove("T1");
     System.out.println("----");

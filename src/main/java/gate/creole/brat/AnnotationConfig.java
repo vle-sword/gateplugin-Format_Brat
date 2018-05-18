@@ -17,44 +17,45 @@ public class AnnotationConfig {
   public Set<String> attributes = new HashSet<String>();
 
   public AnnotationConfig(URL url) throws Exception {
-    BufferedReader in =
-      new BufferedReader(new InputStreamReader(url.openStream()));
+    try (BufferedReader in =
+        new BufferedReader(new InputStreamReader(url.openStream()))) {
 
-    Set<String> active = null;
+      Set<String> active = null;
 
-    String line;
-    while((line = in.readLine()) != null) {
-      if(line.trim().length() == 0) continue;
+      String line;
+      while((line = in.readLine()) != null) {
+        if(line.trim().length() == 0) continue;
 
-      line = line.trim();
+        line = line.trim();
 
-      // skip comments
-      if(line.charAt(0) == '#') continue;
-      
-      //skip macro definitions
-      if (line.charAt(0) == '<') continue;
-      
-      if(line.charAt(0) == '[') {
-        if(line.equals("[entities]")) {
-          active = entities;
-        } else if(line.equals("[events]")) {
-          active = events;
-        } else if(line.equals("[relations]")) {
-          active = relations;
-        } else if(line.equals("[attributes]")) {
-          active = attributes;
-        } else {
-          active = null;
+        // skip comments
+        if(line.charAt(0) == '#') continue;
+
+        // skip macro definitions
+        if(line.charAt(0) == '<') continue;
+
+        if(line.charAt(0) == '[') {
+          if(line.equals("[entities]")) {
+            active = entities;
+          } else if(line.equals("[events]")) {
+            active = events;
+          } else if(line.equals("[relations]")) {
+            active = relations;
+          } else if(line.equals("[attributes]")) {
+            active = attributes;
+          } else {
+            active = null;
+          }
+        } else if(active != null) {
+          active.add(line.split("\\s+", 2)[0]);
         }
-      } else if(active != null) {
-        active.add(line.split("\\s+",2)[0]);
       }
     }
   }
 
   @Override
   public String toString() {
-    return entities.toString() + events.toString() + relations.toString() +
-      attributes.toString();
+    return entities.toString() + events.toString() + relations.toString()
+        + attributes.toString();
   }
 }

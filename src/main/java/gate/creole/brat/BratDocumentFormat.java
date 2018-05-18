@@ -1,5 +1,16 @@
 package gate.creole.brat;
 
+import java.io.BufferedReader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.io.IOUtils;
+
 import gate.Annotation;
 import gate.AnnotationSet;
 import gate.Document;
@@ -22,19 +33,6 @@ import gate.relations.Relation;
 import gate.relations.RelationSet;
 import gate.util.DocumentFormatException;
 import gate.util.FeatureBearer;
-
-import java.io.BufferedReader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
-import org.apache.commons.io.IOUtils;
 
 @CreoleResource(name = "brat Document Format", isPrivate = true, autoinstances = {@AutoInstance(hidden = true)})
 public class BratDocumentFormat extends TextualDocumentFormat {

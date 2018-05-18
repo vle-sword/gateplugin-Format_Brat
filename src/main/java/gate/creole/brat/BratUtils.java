@@ -1,5 +1,12 @@
 package gate.creole.brat;
 
+import java.io.IOException;
+import java.io.PrintStream;
+import java.util.Set;
+
+import com.fasterxml.jackson.core.JsonGenerationException;
+import com.fasterxml.jackson.core.JsonGenerator;
+
 import gate.AnnotationSet;
 import gate.creole.brat.annotations.Attribute;
 import gate.creole.brat.annotations.BratAnnotation;
@@ -8,15 +15,6 @@ import gate.creole.brat.annotations.Normalization;
 import gate.creole.brat.annotations.Note;
 import gate.creole.brat.annotations.Relation;
 import gate.creole.brat.annotations.TextBound;
-
-import java.io.IOException;
-import java.io.PrintStream;
-import java.util.Set;
-
-import org.apache.commons.lang.StringEscapeUtils;
-
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.core.JsonGenerator;
 
 public class BratUtils {
 
