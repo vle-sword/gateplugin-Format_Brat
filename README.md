@@ -19,8 +19,8 @@ document format unpacked the original document.
 
 ## Normalization
 
-brat annotations can include normalization information ((see the docs for more
-details)[http://brat.nlplab.org/normalization.html]) which link annotations
+brat annotations can include normalization information ([see the docs for more
+details](http://brat.nlplab.org/normalization.html)) which link annotations
 to entities in a remote knowledge base; the examples link annotations to
 Wikipedia entries for example.
 
