@@ -253,7 +253,7 @@ public class Annotations implements Iterable<BratAnnotation> {
       if(entity.getFeatures().containsKey("string")) {
         builder.append(entity.getFeatures().get("string"));
       } else {
-        Utils.cleanStringFor(annots.getDocument(), entity);
+        builder.append(Utils.cleanStringFor(annots.getDocument(), entity));
       }
 
       annotations.add(BratAnnotation.parse(builder.toString()));
