@@ -1,5 +1,8 @@
 # brat Document Format
 
+Provides support for loading/saving annotations stored in the [brat
+standoff](http://brat.nlplab.org/standoff.html) format
+
 ## Loading Documents
 
 To load documents in the brat format make sure you have the `.ann` file next to
