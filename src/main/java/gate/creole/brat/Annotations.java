@@ -402,7 +402,7 @@ public class Annotations implements Iterable<BratAnnotation> {
 
     for (String value : values) {
       // Remove the space at beginning of sentence and adapt the new start
-      // offset
+      // offset. Indeed, brat interface wait for an annotation with no space at the beginning.
       int uncleanedValueLength = value.length();
       value = value.replaceFirst("^\\s*", "");
 
