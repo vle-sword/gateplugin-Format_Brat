@@ -204,9 +204,17 @@ public class Annotations implements Iterable<BratAnnotation> {
   @Override
   public String toString() {
     StringBuilder builder = new StringBuilder();
-    for(BratAnnotation annotation : indexById.values()) {
+    boolean isFirstElement = true;
+    for (BratAnnotation annotation : indexById.values()) {
+      // A blank line at the end of the file cause an error in brat. So this
+      // code fix
+      // this.
+      if (isFirstElement) {
+        isFirstElement = false;
+      } else {
+        builder.append("\n");
+      }
       builder.append(annotation);
-      builder.append("\n");
     }
 
     return builder.toString();
@@ -246,14 +254,23 @@ public class Annotations implements Iterable<BratAnnotation> {
       builder.append("\t");
       builder.append(entity.getType());
       builder.append(" ");
-      builder.append(entity.getStartNode().getOffset());
-      builder.append(" ");
-      builder.append(entity.getEndNode().getOffset());
-      builder.append("\t");
-      if(entity.getFeatures().containsKey("string")) {
-        builder.append(entity.getFeatures().get("string"));
+      // manage annotation on multiple line, for this case, you have to declare
+      // a
+      // feature with key = string
+      String textValue = (String) entity.getFeatures().get("string");
+      if (textValue != null && textValue.contains("\n")) {
+        textValue = extractAnnotationOnMultipleLine(builder, entity, textValue);
       } else {
-        builder.append(Utils.cleanStringFor(annots.getDocument(), entity));
+        builder.append(entity.getStartNode().getOffset());
+        builder.append(" ");
+        builder.append(entity.getEndNode().getOffset());
+
+      }
+      builder.append("\t");
+      if (entity.getFeatures().containsKey("string")) {
+        builder.append(textValue);
+      } else {
+        builder.append(Utils.stringFor(annots.getDocument(), entity));
       }
 
       annotations.add(BratAnnotation.parse(builder.toString()));
@@ -377,6 +394,40 @@ public class Annotations implements Iterable<BratAnnotation> {
     return annotations;
   }
 
+  private static String extractAnnotationOnMultipleLine(StringBuilder builder,
+    Annotation entity, String textValue) {
+    String formatedTextValue = textValue;
+    String[] values = textValue.split("\n");
+    long startOffset = entity.getStartNode().getOffset();
+
+    for (String value : values) {
+      // Remove the space at beginning of sentence and adapt the new start
+      // offset
+      int uncleanedValueLength = value.length();
+      value = value.replaceFirst("^\\s*", "");
+
+      int cleanedValueLength = value.length();
+      startOffset = startOffset + uncleanedValueLength - cleanedValueLength;
+      long endOffset = startOffset + cleanedValueLength;
+      // If it is not the first element put ; to separe the 2 couple of offset
+      if (startOffset == entity.getStartNode().getOffset()) {
+        // reformat textValue to put the good format for discountinuous
+        // annotation in
+        // brat http://brat.nlplab.org/standoff.html
+        formatedTextValue = value;
+      } else {
+        builder.append(";");
+        formatedTextValue += " " + value;
+      }
+      builder.append(startOffset);
+      builder.append(" ");
+      builder.append(endOffset);
+      startOffset += cleanedValueLength + 1;
+    }
+    return formatedTextValue;
+  }
+  
+  
   private static int addAttributes(String bratID, int a, Set<String> attributes,
       FeatureMap features, Annotations annotations) {
     StringBuilder builder = new StringBuilder();
