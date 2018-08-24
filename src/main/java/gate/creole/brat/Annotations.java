@@ -397,7 +397,8 @@ public class Annotations implements Iterable<BratAnnotation> {
   private static String extractAnnotationOnMultipleLine(StringBuilder builder,
     Annotation entity, String textValue) {
     String formatedTextValue = textValue;
-    String[] values = textValue.split("\n");
+    // split on \r\n cause it can be this code for end of line on windows
+    String[] values = textValue.split("\r\n|\n");
     long startOffset = entity.getStartNode().getOffset();
 
     for (String value : values) {
