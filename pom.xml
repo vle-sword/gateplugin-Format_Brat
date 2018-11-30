@@ -12,14 +12,13 @@
 		<groupId>uk.ac.gate</groupId>
 		<artifactId>gate-plugin-base</artifactId>
 		<!-- this should be the version of GATE you wish to build against -->
-		<version>8.5-SNAPSHOT</version>
-		<relativePath></relativePath>
+		<version>8.5.1</version>
 	</parent>	
 	
 	<!-- this is the description of this plugin -->
 	<groupId>uk.ac.gate.plugins</groupId>
 	<artifactId>format-brat</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
 
 	<licenses>
 		<license>
