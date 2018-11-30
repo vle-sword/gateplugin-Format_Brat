@@ -13,7 +13,6 @@
 		<artifactId>gate-plugin-base</artifactId>
 		<!-- this should be the version of GATE you wish to build against -->
 		<version>8.5.1</version>
-		<relativePath></relativePath>
 	</parent>	
 	
 	<!-- this is the description of this plugin -->
